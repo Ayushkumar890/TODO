@@ -1,0 +1,70 @@
+<%- include("./partials/header.ejs") %>
+
+    <div class=" min-h-screen mt-10  bg-gray-900">
+
+        <% if(users !='' ) {%>
+            <div class="flex justify-around sm:gap-10 flex-wrap">
+                <div class="flex flex-wrap w-[80%] gap-8 justify-start">
+
+                    <% users.forEach(User=> { %>
+
+                        <div
+                            class="md:w-[30%] w-[100%] sm:w-[40%] text-center bg-white border border-gray-200 mt-16 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
+                            <div class="">
+                                <img src="images/background.jpg" alt="" class="h-48 w-full">
+                            </div>
+
+                            <div class="p-5">
+                                <a href="#">
+                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        <%= User.task %>
+                                    </h5>
+                                </a>
+                                <h1 class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                    <%= User.title %>
+                                </h1>
+                                <h1 class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                    <%= User.time %>
+                                </h1>
+                                <h1 class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                    <%= User.date %>
+                                </h1>
+                                <h1 class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                    <%= User.day %>
+                                </h1>
+                                <div class="flex flex-wrap justify-between">
+
+
+                                    <form action="/delete/<%= User.id %>" method="POST">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit"
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                                            Delete
+                                        </button>
+                                    </form>
+                                    <a href="#"
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m4.5 12.75 6 6 9-13.5" />
+                                        </svg>
+
+
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% }) %>
+                </div>
+            </div>
+
+            <%}else{%>
+                <div class="flex justify-center items-center h-64 ">
+                    <h1 class="text-center text-white text-3xl tracking-widest"> NO TASK FOUND </h1>
+                </div>
+
+                <% } %>
+    </div>
