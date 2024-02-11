@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userschema = new mongoose.Schema({
+const task = new mongoose.Schema({
   task: {
     type: String,
   },
@@ -23,4 +23,16 @@ const userschema = new mongoose.Schema({
   },
 });
 
-exports.User = mongoose.model("User", userschema);
+// const schemaUser = new mongoose.Schema({
+//   name: String,
+//   email: String,
+//   password: String,
+//   verification_token: String,
+//   verified: {
+//     type: Boolean,
+//     default: false,
+//   },
+// });
+
+exports.User = mongoose.model("User", task);
+// exports.LoginUser = mongoose.model("LoginUser", schemaUser);

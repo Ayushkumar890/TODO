@@ -9,17 +9,14 @@
                     <% users.forEach(User=> { %>
 
                         <div
-                            class="md:w-[30%] w-[100%] sm:w-[40%] text-center bg-white border border-gray-200 mt-16 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
-                            <div class="">
-                                <img src="images/background.jpg" alt="" class="h-48 w-full">
+                            class="md:w-[30%] w-[100%] sm:w-[40%] text-center bg-white border border-gray-200 mt-16 rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 ">
+                            <div class="overflow-auto">
+                                <img src="images/background.jpg" alt="" class="h-48 w-full overflow-auto rounded-t-xl">
                             </div>
-
                             <div class="p-5">
-                                <a href="#">
-                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        <%= User.task %>
-                                    </h5>
-                                </a>
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    <%= User.task %>
+                                </h5>
                                 <h1 class="mb-3 font-normal text-gray-700 dark:text-gray-400">
                                     <%= User.title %>
                                 </h1>

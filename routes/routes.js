@@ -63,8 +63,12 @@ router.get("/adduser", (req, res) => {
   res.render("user_add", { title: "Add User" });
 });
 
-router.get("/contact", (req, res) => {
-  res.render("contact", { title: "contact" });
+router.get("/register", (req, res) => {
+  res.render("register", { title: "Register" });
+});
+
+router.get("/login", (req, res) => {
+  res.render("login", { title: "Login" });
 });
 
 router.get("/about", (req, res) => {
