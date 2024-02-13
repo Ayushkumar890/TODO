@@ -6,10 +6,7 @@ const { User } = require("../database/model"); // import user model
 const multer = require("multer");
 const mongoose = require("mongoose");
 
-
 // insert user in a database
-
-
 router.post("/adduser", async (req, res) => {
   try {
     console.log(req.body);
@@ -36,24 +33,13 @@ router.post("/adduser", async (req, res) => {
   }
 });
 
-// delete user from a database
-router.delete('/delete/:id', async(req, res) => {
-  try {
-    const userId = req.params.id;
-    await User.findByIdAndDelete(userId);
-    req.session.message = {
-      type: "success",
-      message: "User deleted successfully!",
-    };
-    res.redirect("/");
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).send("Error deleting user");
-  }
-});
 
 
-router.get("/", async (req, res) => {
+// router.get("/", async (req, res) => {
+//   res.render("home", { title: "Home" });
+// });
+
+router.get("/task", async (req, res) => {
   const users = await User.find();
   // console.log(users);
   res.render("index", { title: "Home", users: users });
@@ -61,14 +47,6 @@ router.get("/", async (req, res) => {
 
 router.get("/adduser", (req, res) => {
   res.render("user_add", { title: "Add User" });
-});
-
-router.get("/register", (req, res) => {
-  res.render("register", { title: "Register" });
-});
-
-router.get("/login", (req, res) => {
-  res.render("login", { title: "Login" });
 });
 
 router.get("/about", (req, res) => {
