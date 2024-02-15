@@ -5,18 +5,18 @@
   <form action="/adduser" method="post" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-xl">
     <div class="mb-4">
       <label for="task" class="block text-gray-900 text-base font-bold">Task</label>
-      <input type="text" id="task" name="task" placeholder="Enter task"
+      <input type="text" id="task" name="task" placeholder="Enter task" required
         class="form-input mt-1 outline-none py-4 block w-full select-none ">
     </div>
     <div class="mb-4">
       <label for="title" class="block text-gray-900 text-base font-bold">Title</label>
-      <input type="text" id="time" name="title" placeholder="Enter title"
+      <input type="text" id="time" name="title" placeholder="Enter title" required
         class="form-input mt-1 outline-none py-4 block w-full select-none">
     </div>
     <div class="mb-4">
      
       <label for="large" class="block mb-2 text-base font-bold text-gray-900">Day</label>
-      <select id="large" name="day"
+      <select id="large" name="day" 
         class="block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg  focus:ring-blue-500 focus:border-blue-50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
         <option value="Everyday">Select</option>
@@ -26,12 +26,12 @@
       </select>
       <div class="mb-4">
         <label for="Time" class="block text-gray-900 text-base font-bold">Time</label>
-        <input type="time" id="time" name="time" placeholder="Enter time"
+        <input type="time" id="time" name="time" placeholder="Enter time" required
           class="form-input mt-1 outline-none py-4 block w-full select-none">
       </div>
       <div class="mb-4">
         <label for="Date" class="block text-gray-900 text-base font-bold">Date</label>
-        <input type="date" id="date" name="date" placeholder="Enter date"
+        <input type="date" id="date" name="date" placeholder="Enter date" required
           class="form-input mt-1 outline-none py-4 block w-full select-none ">
       </div>
       <button type="submit" class="bg-blue-500 text-white py-2 px-4 w-full rounded hoverbg-blue-600">Add Task</button>
