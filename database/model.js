@@ -6,6 +6,7 @@ const taskSchema = new mongoose.Schema({
   date: String,
   day: String,
   time: String,
+  email : String,
   created: { type: Date, default: Date.now }, 
 });
 
@@ -13,11 +14,12 @@ const schemaUser = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
-  verification_token: String,
-  verified: {
-    type: Boolean,
-    default: false,
-  },
+  login_id: String,
+  // verification_token: String,
+  // verified: {
+  //   type: Boolean,
+  //   default: false,
+  // },
 });
 
 exports.User = mongoose.model("User", taskSchema); 

@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
@@ -38,28 +37,15 @@ exports.postRegister = async (req, res) => {
       if (!userExists) {
         hashedPass = await bcrypt.hash(password1, 10);
         const token = crypto.randomBytes(32).toString("hex");
-
-        //   const photo = "/assets/images/client.jpg";
         await LoginUser.create({
           name: name,
           email: email,
           password: hashedPass,
-          verification_token: token,
         });
 
-        verification_link = `http://localhost:3000/verify/${token}`;
-
-        const message = {
-          to: email,
-          from: "Thexitingway@gmail.com",
-          subject: "TODO Verification!",
-          text: `Verify your account here (paste link on browser if not clickabl)\n \n ${verification_link} \n\n Thanks For Choosing our platform! \n Team, The Xiting Way`,
-        };
-        await sgMail
-          .send(message)
-          .then((response) => console.log("Email sent!"))
-          .catch((error) => console.log(error.message));
-        res.redirect("login?message=Email Sent! Verify to login.&color=green");
+        res.redirect(
+          "login?message= Account created successfully! Login to continue.&color=green"
+        );
       } else {
         res.render("register", {
           message: "User with similar data already exists!",
@@ -73,22 +59,6 @@ exports.postRegister = async (req, res) => {
   }
 };
 
-// VERIFY TOKEN
-
-exports.verifyToken = async (req, res) => {
-  try {
-    const user = await LoginUser.findOneAndUpdate(
-      { verification_token: req.params.token },
-      { $set: { verified: true } }
-    );
-    res.redirect(
-      "/login?message=Account Verified! You can login now.&color=green"
-    );
-  } catch (e) {
-    console.log(e);
-    res.send("<h1>Something Went Wrong!</h1>");
-  }
-};
 
 // GET__LOGIN
 
@@ -117,12 +87,8 @@ exports.postLogin = async (req, res) => {
         message: "Account doesn't exist! check entered credentials.",
         color: "red",
       });
-    } else if (!current_user.verified) {
-      res.render("login", {
-        message: "Account not Verified! check email and verify before login.",
-        color: "red",
-      });
-    } else {
+    } 
+    else {
       const passCheck = await bcrypt.compare(
         req.body.password,
         current_user.password
@@ -145,4 +111,12 @@ exports.postLogin = async (req, res) => {
     console.log(e);
     res.render("login", { message: "Invalid Credentials!", color: "red" });
   }
+};
+
+exports.logout = (req, res) => {
+  res.cookie("token", null, {
+    httpOnly: true,
+    expires: new Date(Date.now()), //deleting cookies now
+  });
+  res.redirect("login");
 };

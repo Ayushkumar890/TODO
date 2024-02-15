@@ -14,11 +14,9 @@ const { User, LoginUser } = require("./database/model.js");
 
 require("dotenv").config();
 const { Template } = require("ejs");
-// const router = require("./routes/routes");
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 
 const API_KEY = process.env.SENDGRID_API_KEY;
 sgMail.setApiKey(API_KEY);
@@ -26,10 +24,6 @@ sgMail.setApiKey(API_KEY);
 
 const db = require("./database/db_config.js");
 db();
-
-// create a user model
-// const User = require("./database/model");
-// const LoginUser = require("./database/model");
 
 //   middleware
 app.use(express.json());
@@ -40,59 +34,77 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 app.use(express.static("Public"));
 
-app.use(
-  session({
-    secret: "my secret key",
-    saveUninitialized: true,
-    resave: false,
-  })
-);
+// app.use(
+//   session({
+//     secret: "my secret key",
+//     saveUninitialized: true,
+//     resave: false,
+//   })
+// );
 
-app.use((req, res, next) => {
-  res.locals.message = req.session.massage;
-  delete req.session.massage;
-  next();
-});
+// app.use((req, res, next) => {
+//   res.locals.message = req.session.massage;
+//   delete req.session.massage;
+//   next();
+// });
 
 // insert user in a database
 
 app.post("/adduser", async (req, res) => {
   try {
-    console.log(req.body);
-    // Create a new user instance based on the request body and uploaded file
+    // Find the currently logged-in user
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const loginUser = await LoginUser.findById(decoded._id);
+
+    // Create the task 
     await User.create({
       task: req.body.task,
       title: req.body.title,
       date: req.body.date,
       day: req.body.day,
       time: req.body.time,
+      email: loginUser.email, 
     });
 
-    // Redirect to the homepage after successful user addition
-
+    // Redirect to the homepage after successful 
     req.session.message = {
       type: "success",
-      message: "User added successfully!",
+      message: "Task added successfully!",
     };
     res.redirect("/task");
   } catch (error) {
-    // Handle any errors that occur during the user addition process
-    console.error("Error adding user:", error);
-    res.status(500).send("Error adding user");
+    // Handling errors 
+    console.error("Error adding task:", error);
+    res.status(500).send("Error adding task");
   }
 });
+
+
+const userExists = (req, res, next) => {
+  const token = req.cookies.token;
+  console.log(token);
+  if (token) {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const the_user = LoginUser.findById(decoded._id);
+    next();
+  } else {
+    res.render("login");
+  }
+};
 
 const {
   getRegister,
   postRegister,
   getIndex,
-  verifyToken,
   getLogin,
   postLogin,
+  logout,
+
 } = require("./controllers/auth");
+const { use } = require("passport");
 
 app.get("/", getIndex);
-
 
 app.post("/register", postRegister);
 
@@ -100,16 +112,29 @@ app.get("/register", getRegister);
 
 app.post("/register", postRegister);
 
-app.get("/verify/:token", verifyToken);
-
 app.get("/login", getLogin);
 
 app.post("/login", postLogin);
 
-app.get("/task", async (req, res) => {
-  const users = await User.find();
-  // console.log(users);
-  res.render("index", { title: "Home", users: users });
+app.get("/logout", logout);
+
+
+app.get("/task", userExists, async (req, res) => {
+  try {
+    // Find the currently logged-in user
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const loginUser = await LoginUser.findById(decoded._id).exec();
+
+    // Fetch all the tasks from the database
+    
+    const users = await User.find();
+
+    res.render("index", { title: "Home", users: users, loginUser: loginUser });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).send("Error fetching tasks");
+  }
 });
 
 app.get("/adduser", (req, res) => {
@@ -119,8 +144,6 @@ app.get("/adduser", (req, res) => {
 app.get("/about", (req, res) => {
   res.render("about", { title: "about" });
 });
-
-// app.use("/", require("./routes/routes"));
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
